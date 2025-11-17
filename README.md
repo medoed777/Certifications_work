@@ -31,7 +31,7 @@
 > source venv/bin/activate  # Для Windows используйте: venv\Scripts\activate
 
 3. Установите зависимости:
-> pip install requirements.txt
+> pip install -r requirements.txt
  
 4. Примените миграции:
 >python manage.py migrate
