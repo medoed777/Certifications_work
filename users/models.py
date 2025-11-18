@@ -41,7 +41,8 @@ class User(AbstractUser):
         null=False,
     )
     phone = models.CharField(
-        max_length=20, blank=True, null=True, verbose_name="Телефон")
+        max_length=20, blank=True, null=True, verbose_name="Телефон"
+    )
     city = models.CharField(max_length=50, blank=True, null=True, verbose_name="Город")
 
     USERNAME_FIELD = "email"

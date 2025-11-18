@@ -15,9 +15,9 @@ class Supplier(models.Model):
 
 class NetworkNode(models.Model):
     LEVEL_CHOICES = [
-        (0, 'Завод'),
-        (1, 'Розничная сеть'),
-        (2, 'Индивидуальный предприниматель'),
+        (0, "Завод"),
+        (1, "Розничная сеть"),
+        (2, "Индивидуальный предприниматель"),
     ]
 
     name = models.CharField(max_length=255, verbose_name="Название")
@@ -31,8 +31,19 @@ class NetworkNode(models.Model):
     product_model = models.CharField(max_length=255, verbose_name="Модель продукта")
     product_release_date = models.DateField(verbose_name="Дата выпуска продукта")
 
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='suppliers', null=True, verbose_name="Поставщик")
-    debt_to_supplier = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Задолженность перед поставщиком")
+    supplier = models.ForeignKey(
+        Supplier,
+        on_delete=models.CASCADE,
+        related_name="suppliers",
+        null=True,
+        verbose_name="Поставщик",
+    )
+    debt_to_supplier = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0.00,
+        verbose_name="Задолженность перед поставщиком",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     level = models.IntegerField(choices=LEVEL_CHOICES, verbose_name="Уровень иерархии")
