@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
-from .models import Supplier, NetworkNode
+
+from .models import NetworkNode, Supplier
 
 
 class SupplierViewSetTest(APITestCase):
@@ -12,13 +12,14 @@ class SupplierViewSetTest(APITestCase):
             "country": "Country",
             "city": "City",
             "street": "Street",
-            "house_number": "1"
+            "house_number": "1",
         }
 
     def test_create_supplier(self):
-        response = self.client.post('/api/suppliers/', self.supplier_data)
+        response = self.client.post("/api/suppliers/", self.supplier_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Supplier.objects.count(), 1)
+
 
 class NetworkNodeViewSetTest(APITestCase):
     def setUp(self):
@@ -28,7 +29,7 @@ class NetworkNodeViewSetTest(APITestCase):
             country="Country",
             city="City",
             street="Street",
-            house_number="1"
+            house_number="1",
         )
         self.network_node_data = {
             "name": "New Node",
@@ -42,16 +43,16 @@ class NetworkNodeViewSetTest(APITestCase):
             "product_release_date": "2023-01-01",
             "supplier": self.supplier.id,
             "debt_to_supplier": 50.00,
-            "level": 1
+            "level": 1,
         }
 
     def test_create_network_node(self):
-        response = self.client.post('/api/network-nodes/', self.network_node_data)
+        response = self.client.post("/api/network-nodes/", self.network_node_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(NetworkNode.objects.count(), 1)
 
     def test_create_network_node_with_invalid_level(self):
         invalid_data = self.network_node_data.copy()
-        invalid_data['level'] = 0  # Уровень завода не может иметь поставщика
-        response = self.client.post('/api/network-nodes/', invalid_data)
+        invalid_data["level"] = 0  # Уровень завода не может иметь поставщика
+        response = self.client.post("/api/network-nodes/", invalid_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
