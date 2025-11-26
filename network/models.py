@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -34,8 +35,9 @@ class NetworkNode(models.Model):
     supplier = models.ForeignKey(
         Supplier,
         on_delete=models.CASCADE,
-        related_name="suppliers",
+        related_name="network_nodes",
         null=True,
+        blank=True,
         verbose_name="Поставщик",
     )
     debt_to_supplier = models.DecimalField(
@@ -47,6 +49,14 @@ class NetworkNode(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     level = models.IntegerField(choices=LEVEL_CHOICES, verbose_name="Уровень иерархии")
+
+    def clean(self):
+        if self.level == 0 and self.supplier is not None:
+            raise ValidationError("Заводы не могут иметь поставщиков.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
